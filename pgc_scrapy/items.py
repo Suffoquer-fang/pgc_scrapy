@@ -19,4 +19,5 @@ class PgcScrapyItem(scrapy.Item):
     v_time = scrapy.Field()
     v_score = scrapy.Field()
     v_area = scrapy.Field()
+    v_desc = scrapy.Field()
 

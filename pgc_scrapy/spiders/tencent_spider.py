@@ -29,6 +29,7 @@ class TencentTVSpider(SitemapSpider):
     v_score = response.xpath('/html/body/div[2]/div[1]/div/div/div/div[1]/div/span[1]/text()').extract()[0]
     v_actors = []
     v_directors = []
+    
 
     soup = BeautifulSoup(response.text, 'lxml')
     ac_info = soup.find(class_='actor_list cf').find_all(class_='item')
@@ -46,6 +47,13 @@ class TencentTVSpider(SitemapSpider):
     v_area = ''
     v_lang = ''
     v_time = ''
+    v_desc = ''
+    v_desc = soup.find(class_='video_desc')
+    if v_desc != None:
+      v_desc = v_desc.find(class_='txt _desc_txt_lineHight').get_text()
+    else:
+      v_desc = ''
+
     for type_item in type_info:
       slot = type_item.find(class_='type_tit')
       value = type_item.find(class_='type_txt')
@@ -61,5 +69,5 @@ class TencentTVSpider(SitemapSpider):
 
     item = PgcScrapyItem(url=response.url, v_title=v_title, v_lang=v_lang, 
             v_tags=v_tags, v_type=v_type, v_actors=v_actors, 
-            v_directors=v_directors, v_time=v_time, v_score=v_score, v_area=v_area)
+            v_directors=v_directors, v_time=v_time, v_score=v_score, v_area=v_area, v_desc = v_desc)
     return item

@@ -6,7 +6,8 @@ from scrapy.spiders import SitemapSpider
 class TencentTVSpider(SitemapSpider):
   name = 'tencent_tv'
 
-  sitemap_urls = ['https://v.qq.com/sitemap/cover_tv.xml']
+  sitemap_urls = ['http://v.qq.com/sitemap/cover_movie.xml', 
+                  'https://v.qq.com/sitemap/cover_tv.xml']
 
   def start_requests(self):
     requests = list(super(TencentTVSpider, self).start_requests())
@@ -60,7 +61,7 @@ class TencentTVSpider(SitemapSpider):
       if slot is not None:
         if slot.get_text() == '语　言:':
           v_lang = value.get_text()
-        elif slot.get_text() == '出品时间:':
+        elif slot.get_text() == '出品时间:' or slot.get_text() == '上映时间:':
           v_time = value.get_text()
         elif slot.get_text() == '地　区:':
           v_area = value.get_text()

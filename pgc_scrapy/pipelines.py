@@ -12,7 +12,8 @@ import pymysql
 class PgcScrapyPipeline:
   def __init__(self):
     super().__init__()
-    self.db = pymysql.connect("localhost","root","","pgc" )
+    # self.db = pymysql.connect("localhost","root","","pgc" )
+    self.db = pymysql.connect('rm-bp1i2b60x7f66982fto.mysql.rds.aliyuncs.com', 'fangyan', 'fangyan123', 'pgc')
     self.cursor = self.db.cursor()
 
   def hasSeen(self, url):

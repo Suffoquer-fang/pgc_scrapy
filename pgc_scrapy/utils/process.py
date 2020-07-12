@@ -1,8 +1,8 @@
 import pymysql 
 
 if __name__ == "__main__":
-    db = pymysql.connect('localhost', 'root', '', 'pgc')
-
+    db = pymysql.connect('rm-bp1i2b60x7f66982fto.mysql.rds.aliyuncs.com', 'fangyan', 'fangyan123', 'pgc')
+    
     cursor = db.cursor()
 
     sql = "SELECT * FROM `videoitem` WHERE `url`='%s'"%('eee')

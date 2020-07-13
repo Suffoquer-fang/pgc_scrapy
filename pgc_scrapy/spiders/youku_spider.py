@@ -2,6 +2,7 @@ import scrapy
 from bs4 import BeautifulSoup
 from ..items import PgcScrapyItem
 from scrapy.spiders import SitemapSpider
+import json
 
 class YouKuSpider(SitemapSpider):
   name = 'youku'
@@ -18,8 +19,12 @@ class YouKuSpider(SitemapSpider):
     return requests
 
   def parse(self, response):
-    url = response.url.replace('x/cover', 'detail/1')
-    yield scrapy.Request(url, self.parse_item)
+    ret_json = json.loads(response.text)
+    ret_data = ret_json['data']
+    for item in ret_data:
+      url = 'http:'+item['videoLink']
+      # print(url)
+      yield scrapy.Request(url, self.parse_item)
     # return item
 
   def parse_item(self, response):

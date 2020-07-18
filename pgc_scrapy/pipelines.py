@@ -18,17 +18,18 @@ def _printCallback(item):
 class PgcScrapyPipeline:
   def __init__(self):
     super().__init__()
-    self.dbHelper = DBHelper(_printCallback)
+    self.dbHelper = DBHelper(_printCallback, '127.0.0.1', 'root', '', 'pgc')
 
   def hasSeen(self, item):
-    return self.dbHelper.select(item)
+    return self.dbHelper.selectVideo(item) != None
 
   
 
   def process_item(self, item, spider):
-      self.dbHelper.insert(item)
-
-      return item
+    self.dbHelper.handleVideo(item)
+    self.dbHelper.handlePeople(item)
+    
+    return item
 
   def close_spider(self, spider):
     self.dbHelper.closeDB()

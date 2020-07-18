@@ -2,13 +2,20 @@ import pymysql
 
 
 class DBHelper:
-  def __init__(self, exceptionCallback, host='rm-bp1i2b60x7f66982fto.mysql.rds.aliyuncs.com', user='fangyan', passwd='fangyan123', db='pgc'):
+  def __init__(self, exceptionCallback=None, host='rm-bp1i2b60x7f66982fto.mysql.rds.aliyuncs.com', user='fangyan', passwd='fangyan123', db='pgc'):
     super().__init__()
     self.db = pymysql.connect(host, user, passwd, db)
     self.cursor = self.db.cursor()
     self.callback = exceptionCallback
 
-  
+  def getMaxID(self):
+    return 
+
+  def selectVideoByID(self, idx):
+    sql = "SELECT * FROM `videoitem` WHERE `id`='%s'"%(idx)
+    self.cursor.execute(sql)
+    results = self.cursor.fetchone()
+    return results
 
   def selectVideo(self, item):
     url = item['url']
@@ -37,7 +44,8 @@ class DBHelper:
     except:
       self.db.rollback()
       print(sql)
-      self.callback()
+      if self.callback is not None:
+        self.callback()
 
  
 
@@ -51,7 +59,8 @@ class DBHelper:
       self.db.commit()
     except:
       self.db.rollback()
-      self.callback()
+      if self.callback is not None:
+        self.callback()
   
   def _updateSinglePerson(self, name, idx):
     sql = "UPDATE `peopleitem` SET `video`='%s' WHERE `name`='%s'"%(idx, name)
@@ -60,7 +69,8 @@ class DBHelper:
       self.db.commit()
     except:
       self.db.rollback()
-      self.callback()
+      if self.callback is not None:
+        self.callback()
 
 
   def _handleSinglePerson(self, name, idx):

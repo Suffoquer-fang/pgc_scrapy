@@ -3,6 +3,7 @@ from pgc_scrapy.utils.db_helper import DBHelper
 
 import random
 from tqdm import tqdm
+import time
 
 def randomCheckVideo(db, idx):
   idx = str(idx)
@@ -50,14 +51,21 @@ def getPeopleInfo(db, name):
   else:
     return res[1].split(',')
 
+
+def testSearch(db, name):
+  pass
+
 if __name__ == "__main__":
   db = DBHelper(None, '127.0.0.1', 'root', '', 'pgc')
 
+  flag = True 
+  print('\nStarting Test...')
+  print()
   print('*'*50)
   for i in tqdm(range(300)):
     idx = random.randint(1, 28000)
     if not randomCheckVideo(db, idx):
-      
+      flag = False
       break
       
   print('*'*50)
@@ -69,6 +77,29 @@ if __name__ == "__main__":
 
   for name in tqdm(nameList):
     if not checkPeople(db, name):
+      flag = False
       break
   print('*'*50)
+  # print()
+  if flag:
+    print('Test Passed')
+  else:
+    print('Test Failed')
+  print()
 
+  # for name in nameList:
+  #   print('name:', name)
+  #   begin = time.time()
+  #   retList = getPeopleInfo(db, name)
+  #   # print(retList, len(retList))
+  #   sql = "SELECT * from `videoitem` WHERE `id` IN ('%s')"%("','".join(retList))
+  #   # print(sql)
+  #   ans = db.SQL(sql)
+  #   print('inverted index:', time.time()-begin)
+
+  #   begin = time.time()
+  #   sql = "SELECT * FROM `videoitem` WHERE `actors` LIKE '%%%s%%'"%(name)
+  #   ans = db.SQL(sql)
+  #   # print(ans)
+  #   print('like search', time.time()-begin)
+  #   print()

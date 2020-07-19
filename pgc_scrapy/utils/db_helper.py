@@ -9,8 +9,23 @@ class DBHelper:
     self.callback = exceptionCallback
 
   def getMaxID(self):
-    return 
+    return 28000
 
+  def SQL(self, sql):
+    if 'SELECT' in sql:
+      self.cursor.execute(sql)
+      return self.cursor.fetchall()
+    else:
+      try:
+        self.cursor.execute(sql)
+        self.db.commit()
+      except:
+        self.db.rollback()
+        print(sql)
+        if self.callback is not None:
+          self.callback()
+      return None
+  
   def selectVideoByID(self, idx):
     sql = "SELECT * FROM `videoitem` WHERE `id`='%s'"%(idx)
     self.cursor.execute(sql)
@@ -47,7 +62,7 @@ class DBHelper:
       if self.callback is not None:
         self.callback()
 
- 
+  
 
   def updateVideo(self, item):
     pass
